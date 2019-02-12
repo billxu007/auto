@@ -1,0 +1,51 @@
+*** Settings ***
+Library           Selenium2Library
+
+*** Keywords ***
+click_to do list
+    Click Link    //*[@id="admin-todolist"]/span/a
+
+list_input_code
+    [Arguments]    ${input}
+    Input Text    name=code    ${input}
+
+list_click_Search
+    Click Element    //*[@id="content"]/div[1]/form/fieldset/div[2]/section[3]/button
+
+verification_list_get_tabletext
+    [Arguments]    ${code}    ${begindate}    ${enddate}    ${status}
+    ${returntext}    Get Text    id=inbox-table
+    Should Contain Any    ${returntext}    ${code}    ${begindate}    ${enddate}    ${status}    No data available in table
+
+list_input_begindate
+    [Arguments]    ${begindate}
+    Input Text    name=begindate    ${begindate}
+    Click Element    name=begindate
+
+list_input_enddate
+    [Arguments]    ${enddate}
+    Input Text    name=enddate    ${enddate}
+    Click Element    name=enddate
+
+list_input_status
+    [Arguments]    ${search_select}
+    Select From List    name=status    ${search_select}
+
+list_click_Reset
+    Click Element    //*[@id="content"]/div[1]/form/fieldset/div[2]/section[4]/button
+
+list_click_task
+    Click Element    //*[@id="inbox-table"]/tbody/tr[1]
+
+verification_url_customerDetail
+    ${url}    Get Location
+    Should Contain    ${url}    customerDetail
+    [Return]    ${url}
+
+verification_url_reset
+    ${url}    Get Location
+    Should Be Equal As Strings    ${url}    http://test.sales.nmg.com.hk/Sales/Notify/index?type=todolist
+
+verification_disabled
+    ${attr}    Get Element Attribute    name=name_of_business@disabled
+    Should Contain    ${attr}    true
